@@ -3,7 +3,7 @@
  * Fieldmanager extenstion to allow for dashboard widget support.
  *
  * @package Fieldmanager
- * @version 1.0.0-beta.2
+ * @version 0.1
  */
 
 /*
@@ -17,40 +17,48 @@ Author URI: http://addactiondan.me
 
 if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 
-
-
 	class FM_Dash_Widget extends Fieldmanager_Context {
 
+		/**
+		 * [$widget_id description]
+		 * @var [type]
+		 */
 		public $widget_id;
 
+		/**
+		 * [$label description]
+		 * @var [type]
+		 */
 		public $label;
 
-
-
+		/**
+		 * [__construct description]
+		 * @param [type] $widget_id [description]
+		 * @param [type] $label     [description]
+		 */
 		public function __construct( $widget_id, $label ) {
-
-			echo 'get_option array<pre>';
-			print_r( $_GET );
-			echo '</pre>';
-
 			$this->widget_id = $widget_id;
 			$this->label = $label;
 			if ( ! empty( $this->widget_id ) ) {
 				add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 			}
-
-
-
-
 		}
 
+		/**
+		 * [return_html description]
+		 * @param  [type] $type  [description]
+		 * @param  [type] $name  [description]
+		 * @param  [type] $class [description]
+		 * @return [type]        [description]
+		 */
 		public function return_html( $type, $name, $class = null ) {
 			$widget = get_option( $this->widget_id );
 			echo sprintf( '<input type="%s" name="%s[%s]" value="%s" />', esc_attr( $type ), esc_attr( $this->widget_id ), esc_attr( $name ), esc_attr( $widget[ $name ] ) );
 		}
 
-
-
+		/**
+		 * [add_dashboard_widget description]
+		 */
 		public function add_dashboard_widget() {
 			wp_add_dashboard_widget(
 				$this->widget_id,
@@ -60,14 +68,22 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 			);
 		}
 
+		/**
+		 * [render_dashboard_widget description]
+		 * @return [type] [description]
+		 */
 		public function render_dashboard_widget() {
-			// displaying the get_options for this widget
+			// displaying the print_r of get_options for this widget
 			// In a production envrio this would display options in a pretty way
 			echo '<pre>';
 			print_r( get_option( $this->widget_id ) );
 			echo '</pre>';
 		}
 
+		/**
+		 * [configure_dashboard_widget description]
+		 * @return [type] [description]
+		 */
 		public function configure_dashboard_widget() {
 
 			$fm = new Fieldmanager_Textfield( 'test fm', array(
@@ -90,6 +106,6 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 } // end FM check
 
 
-new FM_Dash_Widget( 'test_id_etjdkf', 'Label' );
+new FM_Dash_Widget( 'test_id_1', __( 'Label', 'textdomain' ) );
 
-new FM_Dash_Widget( 'test_widget_2', 'second label' );
+new FM_Dash_Widget( 'test_widget_2', __( 'second label', 'textdomain' ) );
