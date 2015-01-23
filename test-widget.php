@@ -14,7 +14,7 @@ class Test_Widget {
 
 	/**
 	 * This is what would be in the theme files
-	 * Current limitation: is that we MUST use a group to avoid saving the entire $_POST object
+	 * Current limitation: we MUST use a group to avoid saving the entire $_POST object
 	 * Current limitation: does not support repeating fields due to the fact that you cannot set default values ( I think )
 	 */
 	public function test_widget() {
