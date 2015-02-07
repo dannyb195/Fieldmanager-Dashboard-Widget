@@ -26,7 +26,7 @@ class Test_Widget {
 		$months = array( 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' );
 
 		$fm = new Fieldmanager_Group( array(
-			'name'     => $name,
+			'name'  => $name,
 			'label' => 'Test widget label',
 			'children' => array(
 				'text'         => new Fieldmanager_Textfield( 'Text Field', array(
@@ -60,12 +60,16 @@ class Test_Widget {
 				'richtextarea' => new Fieldmanager_RichTextArea( 'Rich Text Area', array(
 					'default_value' => $values['richtextarea'],
 				) ),
+				'repeat_text' => new Fieldmanager_Textfield( 'Repeatable', array(
+					'limit' => 0,
+				) ),
 			)
 		) );
 
-		$text_widget = new FM_Dash_Widget( $fm );
+		new FM_Dash_Widget( $fm );
 
 	} // end test_widget
 
 } // END class
+
 new Test_Widget();

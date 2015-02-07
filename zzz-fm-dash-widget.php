@@ -22,7 +22,9 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 	 * Stores data in wp_options->FM Group->name ( must use a group )
 	 * Usage example can be found in test-widet.php
 	 */
-	class FM_Dash_Widget extends Fieldmanager_Context {
+	class FM_Dash_Widget extends Fieldmanager_Context_Storable {
+
+		public $fm;
 
 		/**
 		 * [$widget_id description]
@@ -42,7 +44,8 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 		 * @param [type] $label     [description]
 		 */
 		public function __construct( $field ) {
-			$this->field = $field; // the FM field object
+
+			$this->fm = $field; // for $this->render_field which checks $this->fm
 			$this->widget_id = $field->name;
 			$this->label = $field->label;
 			if ( ! empty( $this->widget_id ) ) {
@@ -72,6 +75,7 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 			echo 'get option<pre>';
 			print_r( get_option( $this->widget_id ) );
 			echo '</pre>';
+
 		}
 
 		/**
@@ -80,7 +84,9 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 		 */
 		public function configure_dashboard_widget() {
 			// outputting our field group
-			echo $this->field->element_markup( $this->field->name );
+			$values = get_option( $this->widget_id );
+			$this->render_field( array( 'data' => $values ) );
+
 			// checking to make sure we are saving our widget
 			echo '<input type="hidden" name="' . $this->widget_id . '_fm_save_check" value="true" />';
 			echo '<br /><hr />';
@@ -91,9 +97,45 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 			}
 		} // end configure_dashboard_widget
 
+		/**
+		 * Get option.
+		 *
+		 * @see get_option().
+		 */
+		protected function get_data( $data_id, $option_name, $single = false ) {
+			return get_option( $option_name, null );
+		}
+
+		/**
+		 * Add option.
+		 *
+		 * @see add_option().
+		 */
+		protected function add_data( $data_id, $option_name, $option_value, $unique = false ) {
+			return add_option( $option_name, $option_value, '', $this->wp_option_autoload ? 'yes' : 'no' );
+		}
+
+		/**
+		 * Update option.
+		 *
+		 * @see update_option().
+		 */
+		protected function update_data( $data_id, $option_name, $option_value, $option_prev_value = '' ) {
+			return update_option( $option_name, $option_value );
+		}
+
+		/**
+		 * Delete option.
+		 *
+		 * @see delete_option().
+		 */
+		protected function delete_data( $data_id, $option_name, $option_value = '' ) {
+			return delete_option( $option_name, $option_value );
+		}
+
 	} // end class
 
-} // end FM check
+	// including the files that represents theme level code, i.e. what we just build all ^ that for
+	include( 'test-widget.php' );
 
-// including the files that represents theme level code, i.e. what we just build all ^ that for
-include( 'test-widget.php' );
+} // end FM check
