@@ -90,10 +90,25 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 			// checking to make sure we are saving our widget
 			echo '<input type="hidden" name="' . $this->widget_id . '_fm_save_check" value="true" />';
 			echo '<br /><hr />';
+
 			// Using the $field->name to distinguish what should be saved
+			// Looping over $_POST to remove empty repeater fields as they something save empty ones
 			if ( isset( $_POST[ $this->widget_id . '_fm_save_check' ] ) ) {
+				$empty_check = $_POST[ $this->widget_id ];
+				$save_array = array();
+				foreach ($empty_check as $parent_key => $parent_value) {
+					$save_array[ $parent_key ] = $parent_value;
+					if ( is_array( $parent_value ) ) {
+						$save_array[ $parent_key ] = array();
+						foreach ( $parent_value as $child_key => $child_value) {
+							if ( ! empty( $child_value ) ) {
+								$save_array[ $parent_key ][ $child_key ] = $child_value;
+							}
+						}
+					}
+				}
 				// saving our FM group data in wp_options
-				update_option( $this->widget_id, $_POST[ $this->widget_id ] );
+				update_option( $this->widget_id, $save_array );
 			}
 		} // end configure_dashboard_widget
 
@@ -137,5 +152,6 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 
 	// including the files that represents theme level code, i.e. what we just build all ^ that for
 	include( 'test-widget.php' );
+	include( 'test-widget-2.php' );
 
 } // end FM check
