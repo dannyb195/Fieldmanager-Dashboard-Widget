@@ -44,8 +44,8 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 		 * @param [type] $label     [description]
 		 */
 		public function __construct( $field ) {
-
 			$this->fm = $field; // for $this->render_field which checks $this->fm
+			//TO DO: add group check here else bail out
 			$this->widget_id = $field->name;
 			$this->label = $field->label;
 			if ( ! empty( $this->widget_id ) ) {
@@ -75,7 +75,6 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 			echo 'get option<pre>';
 			print_r( get_option( $this->widget_id ) );
 			echo '</pre>';
-
 		}
 
 		/**
@@ -91,8 +90,8 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 			echo '<input type="hidden" name="' . $this->widget_id . '_fm_save_check" value="true" />';
 			echo '<br /><hr />';
 
-			// Using the $field->name to distinguish what should be saved
-			// Looping over $_POST to remove empty repeater fields as they something save empty ones
+			// Using the $this->widget_id ( i.e. the group 'name' ) to distinguish what should be saved
+			// Looping over $_POST to remove empty repeater fields as they sometimes save empty ones
 			if ( isset( $_POST[ $this->widget_id . '_fm_save_check' ] ) ) {
 				$empty_check = $_POST[ $this->widget_id ];
 				$save_array = array();
