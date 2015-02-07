@@ -45,7 +45,7 @@ if ( defined( 'FM_VERSION' ) && ! class_exists( 'FM_Dash_Widget' ) ) {
 		 */
 		public function __construct( $field ) {
 			$this->fm = $field; // for $this->render_field which checks $this->fm
-			//TO DO: add group check here else bail out
+			//TO DO: add if ( group ) check here else bail out
 			$this->widget_id = $field->name;
 			$this->label = $field->label;
 			if ( ! empty( $this->widget_id ) ) {
