@@ -1,7 +1,7 @@
 <?php
 
 /**
- * undocumented class
+ * this is demo code which would be found in the theme
  *
  * @package default
  * @author
